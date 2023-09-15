@@ -2,22 +2,31 @@ package com.modelsis.modelsisspringbootfullstack.controllers;
 
 import com.modelsis.modelsisspringbootfullstack.models.TypeProduct;
 import com.modelsis.modelsisspringbootfullstack.services.TypeProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-    @RestController
+import java.util.List;
+
+@RestController
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping("api")
     public class TypeProductController {
-        @Autowired
-        private TypeProductService typeProductService;
 
-        @GetMapping("/typeProducts")
-        public Iterable<TypeProduct> getTypeProducts() {
-            return typeProductService.getTypeProducts();
+        private final TypeProductService typeProductService;
+
+        public TypeProductController(TypeProductService typeProductService) {
+            this.typeProductService = typeProductService;
         }
+
+        @PostMapping("/typeProduct")
+        public ResponseEntity<?> addType(@RequestBody String name){
+            return typeProductService.create(name);
+        }
+
+        @GetMapping("/type/all")
+        public List<TypeProduct> getAll(){
+            return  typeProductService.getAll();
+        }
+
     }
 

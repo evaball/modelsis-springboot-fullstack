@@ -1,42 +1,59 @@
 package com.modelsis.modelsisspringbootfullstack.services;
 
 
-import com.modelsis.modelsisspringbootfullstack.converters.ProductConverter;
 import com.modelsis.modelsisspringbootfullstack.dtos.ProductDto;
 import com.modelsis.modelsisspringbootfullstack.models.Product;
 import com.modelsis.modelsisspringbootfullstack.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductService {
 
-//    private final ProductConverter productConverter;
-//
-    @Autowired
-    private  ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final TypeProductService typeProductService;
 
-//    public ProductService(ProductConverter productConverter, ProductRepository productRepository){
-//        this.productConverter= productConverter;
-//        this.productRepository=productRepository;
-//    }
-    public Iterable<Product> getProducts() {
-        return productRepository.findAll();
+    public ProductService(ProductRepository productRepository, TypeProductService typeProductService) {
+        this.productRepository = productRepository;
+        this.typeProductService = typeProductService;
+    }
+    public ResponseEntity<?> create(ProductDto productDto) {
+        if (productRepository.findProductByName(productDto.getName()).get(0) != null){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Ce nom est déjà utilisé.");
+        }
+        Product product = new Product();
+        product.setName(productDto.getName());
+        product.setType(productDto.getId_type());
+        productRepository.save(product);
+        return ResponseEntity.status(HttpStatus.OK).body("Produit ajouté avec succés");
+
+    }
+    public List<Product> getAll(){
+        return (List<Product>) productRepository.findAll();
     }
 
+    public ResponseEntity<?> update(ProductDto productDto, int id){
+        if (productRepository.findProductByName(productDto.getName()).size()>0 &&
+                (productRepository.findProductByName(productDto.getName()).get(0).getId()!= id)){
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Ce nom est déjà utilisé.");
+        }
 
-//    public ResponseEntity<?> saveProduct(ProductDto productDto) {
-//
-//        Product product = productConverter.convertToEntity(productDto);
-//        Product savedProduct= productRepository.save(product);
-//        return ResponseEntity.ok(savedProduct);
-//    }
-//
-//    public ResponseEntity<?> updateProduct(Long id, ProductDto productDto) {
-//        Product product = productRepository.findById(id).orElseThrow(() -> new ChangeSetPersister.NotFoundException("Product not found with id: " + id));
-//        product.setName(productDto.getName());
-//        return productRepository.save(product);
-//    }
+        Product product = findById(id);
+        product.setName(productDto.getName());
+        product.setType(productDto.getId_type());
+        productRepository.save(product);
+        return ResponseEntity.status(HttpStatus.OK).body("Produit modifié avec succés");
+
+
+        }
+
+    private Product findById(int id) {
+        return productRepository.findById((long) id).get();
+    }
+
 }
