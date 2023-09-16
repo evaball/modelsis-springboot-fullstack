@@ -25,7 +25,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/all")
-    public List<Product> getAll(){
+    public Iterable<Product> getAll(){
         return productService.getAll();
     }
 

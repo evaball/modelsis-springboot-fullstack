@@ -12,5 +12,7 @@ public class ProductDto {
 
     private String name;
 
-    private TypeProduct id_type;
+    private String createdDate;
+
+    private TypeProduct typeProduct;
 }

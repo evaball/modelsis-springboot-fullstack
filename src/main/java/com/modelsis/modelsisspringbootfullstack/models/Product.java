@@ -14,10 +14,12 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String createdDate;
+
     @Column(unique = true, nullable = false)
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
-    private TypeProduct type;
+    private TypeProduct typeProduct;
 }
