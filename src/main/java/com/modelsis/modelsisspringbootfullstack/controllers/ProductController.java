@@ -24,17 +24,17 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @GetMapping("/product/all")
+    @GetMapping("/products")
     public Iterable<Product> getAll(){
         return productService.getAll();
     }
 
-    @PostMapping("/product/add")
+    @PostMapping("/products")
     public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto){
         return productService.create(productDto);
 
     }
-    @PutMapping("/product/update/{id}")
+    @PutMapping("/products/{id}")
     public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody ProductDto productDto){
         return productService.update(productDto,id);
     }

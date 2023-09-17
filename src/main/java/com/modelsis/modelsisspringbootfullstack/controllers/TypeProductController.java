@@ -18,7 +18,7 @@ public class TypeProductController {
             this.typeProductService = typeProductService;
         }
 
-        @PostMapping("/typeProduct")
+        @PostMapping("/productType")
         public ResponseEntity<?> addType(@RequestBody TypeProductDto typeProductDto){
             return typeProductService.create(typeProductDto);
         }
