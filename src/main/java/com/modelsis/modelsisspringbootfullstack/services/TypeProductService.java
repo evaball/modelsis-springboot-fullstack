@@ -1,8 +1,8 @@
 package com.modelsis.modelsisspringbootfullstack.services;
 
+import com.modelsis.modelsisspringbootfullstack.dtos.TypeProductDto;
 import com.modelsis.modelsisspringbootfullstack.models.TypeProduct;
 import com.modelsis.modelsisspringbootfullstack.repository.TypeProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,30 +19,23 @@ public class TypeProductService {
     public TypeProduct findById(int id){
         return typeProductRepository.findById((long) id).get();
     }
-    public ResponseEntity<?> create(String name){
-        if (typeProductRepository.findTypeProductByName(name) != null){
+    public ResponseEntity<?> create(TypeProductDto typeProductDto){
+        if (typeProductRepository.findTypeProductByName(typeProductDto.getName()).size()>0){
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Ce nom est déjà utilisé.");
         }
-        TypeProduct type = new TypeProduct();
-        type.setName(name);
-
+        TypeProduct typeProduct = new TypeProduct();
+        typeProduct.setName(typeProductDto.getName());
+        typeProductRepository.save(typeProduct);
         return ResponseEntity.status(HttpStatus.OK).body("Type ajouté avec succés");
 
     }
-    public List<TypeProduct> getAll(){
-        return (List<TypeProduct>) typeProductRepository.findAll();
+    public Iterable<TypeProduct> getAll(){
+        return typeProductRepository.findAll();
     }
 
 
 
-//    public Iterable<TypeProduct> getTypeProducts() {
-//        return typeProductRepository.findAll();
-//    }
-
-
-//    public TypeProduct saveTypeProduct(TypeProduct typeProduct) {
-//        TypeProduct savedTypeProduct= typeProductRepository.save(typeProduct);
 //        return savedTypeProduct;
 //
 }

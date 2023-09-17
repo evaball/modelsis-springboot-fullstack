@@ -1,16 +1,16 @@
 package com.modelsis.modelsisspringbootfullstack.controllers;
 
+import com.modelsis.modelsisspringbootfullstack.dtos.TypeProductDto;
 import com.modelsis.modelsisspringbootfullstack.models.TypeProduct;
 import com.modelsis.modelsisspringbootfullstack.services.TypeProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
-    @CrossOrigin(origins = "http://localhost:4200")
-    @RequestMapping("api")
-    public class TypeProductController {
+@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("api")
+public class TypeProductController {
 
         private final TypeProductService typeProductService;
 
@@ -19,12 +19,12 @@ import java.util.List;
         }
 
         @PostMapping("/typeProduct")
-        public ResponseEntity<?> addType(@RequestBody String name){
-            return typeProductService.create(name);
+        public ResponseEntity<?> addType(@RequestBody TypeProductDto typeProductDto){
+            return typeProductService.create(typeProductDto);
         }
 
         @GetMapping("/type/all")
-        public List<TypeProduct> getAll(){
+        public Iterable<TypeProduct> getAll(){
             return  typeProductService.getAll();
         }
 

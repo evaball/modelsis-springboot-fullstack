@@ -18,7 +18,5 @@ public class TypeProduct {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToMany
-    private List<Product> products;
 
 }
