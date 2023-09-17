@@ -34,8 +34,4 @@ public class TypeProductService {
         return typeProductRepository.findAll();
     }
 
-
-
-//        return savedTypeProduct;
-//
 }
